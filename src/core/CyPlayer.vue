@@ -28,6 +28,7 @@
 
 <script>
 import videoMixin from '@/core/mixin/video';
+import sizeMixin from '@/core/mixin/size';
 import mouseCheckMixin from '@/utils/mousecheck';
 import defineProps from '@/core/defineProps';
 import BottomProgress from '@/core/progress/BottomProgress.vue';
@@ -35,7 +36,34 @@ import BottomProgress from '@/core/progress/BottomProgress.vue';
 export default {
   name: 'CyPlayer',
   components: { BottomProgress },
-  mixins: [defineProps, videoMixin, mouseCheckMixin],
+  mixins: [defineProps, videoMixin, mouseCheckMixin, sizeMixin],
+  methods: {
+    handleSize() {
+      this.setTotalSize(this.videoAutoFix);
+    },
+  },
+  mounted() {
+    // 初始化时没有宽高自动设定一个值，避免初始化加载error元素尺寸消失
+    if (
+      !this.width &&
+      !this.height &&
+      !this.styles?.height &&
+      !this.styles?.width
+    ) {
+      const cElem = this.$refs.containerRef;
+      cElem.style.width = `800px`;
+      cElem.style.height = `450px`;
+    }
+    // video size auto fix
+    if (this.videoAutoFix) {
+      const vElement = this.$refs.videoRef;
+      vElement.addEventListener('loadedmetadata', this.handleSize);
+    }
+  },
+  beforeDestroy() {
+    const vElement = this.$refs.videoRef;
+    vElement.removeEventListener('loadedmetadata', this.handleSize);
+  },
   provide() {
     return {
       videoStates: this.videoStates,

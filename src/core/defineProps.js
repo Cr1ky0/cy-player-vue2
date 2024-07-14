@@ -22,5 +22,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    width: [String, Number],
+    height: [String, Number],
+    videoAutoFix: {
+      type: Boolean,
+      default: true,
+    },
   },
 };

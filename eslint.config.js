@@ -25,6 +25,7 @@ module.exports = [
     },
     rules: {
       'vue/multi-word-component-names': 'off',
+      'vue/no-deprecated-destroyed-lifecycle': 'off',
     },
   },
 ];

@@ -1,5 +1,6 @@
 /**
- * @desc 外部接口 videoStates videoController setVideoStates
+ * @desc 引入 auoPlay
+ * 导出 videoStates videoController setVideoStates
  */
 export default {
   data() {

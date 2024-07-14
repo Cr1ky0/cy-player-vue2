@@ -1,3 +1,8 @@
+/**
+ * @desc 引入 null
+ * 导出 mouseEnter isMobile handleMouseEnter handleMouseLeave
+ * handleTouchStart handleTouchEnd
+ */
 export default {
   data() {
     return {
