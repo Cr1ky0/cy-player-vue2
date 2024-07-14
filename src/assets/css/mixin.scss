@@ -1,0 +1,39 @@
+@mixin position($type, $top, $bottom, $right, $left) {
+  position: $type;
+  left: $left;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+}
+
+@mixin selectable($type) {
+  -webkit-user-select: $type; /* Safari */
+  -moz-user-select: $type; /* Firefox */
+  -ms-user-select: $type; /* IE 10+ */
+  user-select: $type;
+}
+
+@mixin childCenter() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin xCenterAlign($yTransfrom) {
+  @include position(absolute, 0, auto, auto, 50%);
+  transform: translate(-50%, $yTransfrom);
+}
+
+@mixin yCenterAlign($xTransfrom) {
+  @include position(absolute, 50%, auto, auto, 0);
+  transform: translate($xTransfrom, -50%);
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

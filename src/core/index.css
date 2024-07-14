@@ -1,0 +1,20 @@
+html {
+    font-size: 16px;
+}
+
+* {
+    /* 取消轻触高亮效果 */
+    -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 20px; /* 手机屏幕小设置大一点 */
+    }
+}

@@ -1,0 +1,18 @@
+/* 层次变量 */
+$top-layer: 10000;
+$second-top-layer: 1000;
+$middle-layer: 100;
+$bottom-layer: 10;
+
+/* controller */
+$controller-container-height: 2.8rem;
+$progress-bar-height: 0.3rem;
+$controls-height: $controller-container-height - $progress-bar-height;
+
+/* pos */
+$x-dist: 1.5%;
+$y-dist-top: 3%;
+$y-dist-bottom: $controller-container-height + 0.7rem;
+
+/* theme */
+$default-theme-color: #00aeec;
