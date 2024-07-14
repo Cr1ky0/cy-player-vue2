@@ -9,8 +9,18 @@ export default {
       type: Boolean,
       default: false,
     },
-    styles: {
-      type: Object,
+    styles: Object,
+    themeColor: {
+      type: String,
+      default: '#00aeec',
+    },
+    showProgressFloat: {
+      type: Boolean,
+      default: true,
+    },
+    keepControllerShow: {
+      type: Boolean,
+      default: false,
     },
   },
 };

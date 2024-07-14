@@ -1,19 +1,25 @@
+/**
+ * @desc 外部接口 videoStates videoController setVideoStates
+ */
 export default {
   data() {
     return {
-      vRef: null,
+      // 内部变量
+      videoMixinVRef: null,
       /**
        * @description 轮询状态刷新计时器，类似curTime这类属性需要监控到连续的变化，不用原生实现
        */
-      interval: null,
+      videoMixinInterval: null,
       /**
        * @description waiting计时器，playing后一段时间再置为false
        */
-      timer: null,
+      videoMixinTimer: null,
       /**
        * @description 全局hls对象
        */
-      curHls: null,
+      videoMixinCurHls: null,
+
+      // 外部变量
       /**
        * @description video本身的相关状态
        */
@@ -35,16 +41,16 @@ export default {
        * @description video本身的控制方法
        */
       videoController: {
-        load: () => this.vRef?.load(),
-        play: () => this.vRef?.play(),
-        pause: () => this.vRef?.pause(),
+        load: () => this.videoMixinVRef?.load(),
+        play: () => this.videoMixinVRef?.play(),
+        pause: () => this.videoMixinVRef?.pause(),
         setVolume: (volume) => {
-          if (this.vRef) {
+          if (this.videoMixinVRef) {
             // 记录上一次音量值
             if (volume >= 1) localStorage.setItem('lastVolume', String(volume));
             // muted状态下始终为0
             const v = volume <= 0 ? 0 : volume >= 100 ? 100 : volume;
-            this.vRef.volume =
+            this.videoMixinVRef.volume =
               volume <= 0 ? 0 : volume >= 100 ? 1 : volume / 100;
             this.setVideoStates('volume', v);
             // 存储音量值
@@ -52,7 +58,7 @@ export default {
           }
         },
         setCurTime: (curTime) => {
-          if (this.vRef) this.vRef.currentTime = curTime;
+          if (this.videoMixinVRef) this.videoMixinVRef.currentTime = curTime;
         },
         setVideoSrc: (src) => {
           this.setVideoStates('curSrc', src);
@@ -61,32 +67,33 @@ export default {
     };
   },
   methods: {
+    // 内部method
     /**
      * @description 视频是否播放
      */
-    setIsPlay() {
-      if (this.vRef) {
-        this.setVideoStates('isPlay', !this.vRef.paused);
+    videoMixinSetIsPlay() {
+      if (this.videoMixinVRef) {
+        this.setVideoStates('isPlay', !this.videoMixinVRef.paused);
         if (this.videoStates.isPlay) this.setVideoStates('isPlayEnd', false); // 播放时重置
       }
     },
     /**
      * @description 视频结束
      */
-    setIsPlayEnd() {
-      if (this.vRef) {
+    videoMixinSetIsPlayEnd() {
+      if (this.videoMixinVRef) {
         if (this.videoStates.isLoop) this.videoController.play(); // 播放结束循环播放
-        this.setVideoStates('isPlayEnd', this.vRef.ended);
+        this.setVideoStates('isPlayEnd', this.videoMixinVRef.ended);
       }
     },
     /**
      * @description 缓冲时间
      */
-    setBufferedTime() {
-      if (this.vRef && this.vRef.buffered.length >= 1) {
+    videoMixinSetBufferedTime() {
+      if (this.videoMixinVRef && this.videoMixinVRef.buffered.length >= 1) {
         let max = 0;
-        for (let i = 0; i < this.vRef.buffered.length; i++) {
-          const curBuffer = this.vRef.buffered.end(i);
+        for (let i = 0; i < this.videoMixinVRef.buffered.length; i++) {
+          const curBuffer = this.videoMixinVRef.buffered.end(i);
           if (curBuffer > max) max = curBuffer;
         }
         this.setVideoStates('bufferedTime', max); // 浏览器已经缓冲的媒体数据的最远时间点
@@ -96,77 +103,86 @@ export default {
      *
      * @description loadedmetadata事件
      */
-    handleLoadedMetaData() {
-      if (this.vRef) {
+    videoMixinHandleLoadedMetaData() {
+      if (this.videoMixinVRef) {
         this.setVideoStates('isError', false);
-        this.setVideoStates('duration', this.vRef.duration || 0);
-        this.setVideoStates('videoWidth', this.vRef.videoWidth);
-        this.setVideoStates('videoHeight', this.vRef.videoHeight);
+        this.setVideoStates('duration', this.videoMixinVRef.duration || 0);
+        this.setVideoStates('videoWidth', this.videoMixinVRef.videoWidth);
+        this.setVideoStates('videoHeight', this.videoMixinVRef.videoHeight);
       }
     },
     /**
      * @description loadeddata事件
      */
-    handleLoadedData() {
-      if (this.vRef) {
+    videoMixinHandleLoadedData() {
+      if (this.videoMixinVRef) {
         // 切换quality时逻辑
         const curPlayTime = localStorage.getItem('curPlayTime');
         const curTime = parseFloat(curPlayTime || '0');
         this.videoController.setCurTime(curTime);
         localStorage.removeItem('curPlayTime'); // 切换完毕后删除，避免初始化时快进
-        this.setBufferedTime(); // 重置一下buffer
+        this.videoMixinSetBufferedTime(); // 重置一下buffer
       }
     },
     /**
      * @description 视频播放中的waiting
      */
-    onWaiting() {
+    videoMixinOnWaiting() {
       this.setVideoStates('isWaiting', true);
     },
     /**
      * @description 从waiting恢复播放
      */
-    onIsPlaying() {
-      if (this.timer) clearTimeout(this.timer);
-      this.timer = setTimeout(() => {
+    videoMixinOnIsPlaying() {
+      if (this.videoMixinTimer) clearTimeout(this.videoMixinTimer);
+      this.videoMixinTimer = setTimeout(() => {
         this.setVideoStates('isWaiting', false); // waiting结束
       }, 100);
     },
     /**
      * @description error处理
      */
-    handleError() {
+    videoMixinHandleError() {
       this.setVideoStates('isError', true);
     },
-    addEvents(videoElement) {
+    videoMixinAddEvents(videoElement) {
       videoElement.addEventListener(
         'loadedmetadata',
-        this.handleLoadedMetaData,
+        this.videoMixinHandleLoadedMetaData,
       );
-      videoElement.addEventListener('loadeddata', this.handleLoadedData);
-      videoElement.addEventListener('progress', this.setBufferedTime);
-      videoElement.addEventListener('pause', this.setIsPlay);
-      videoElement.addEventListener('play', this.setIsPlay);
-      videoElement.addEventListener('ended', this.setIsPlayEnd);
-      videoElement.addEventListener('waiting', this.onWaiting);
-      videoElement.addEventListener('playing', this.onIsPlaying);
-      videoElement.addEventListener('error', this.handleError);
+      videoElement.addEventListener(
+        'loadeddata',
+        this.videoMixinHandleLoadedData,
+      );
+      videoElement.addEventListener('progress', this.videoMixinSetBufferedTime);
+      videoElement.addEventListener('pause', this.videoMixinSetIsPlay);
+      videoElement.addEventListener('play', this.videoMixinSetIsPlay);
+      videoElement.addEventListener('ended', this.videoMixinSetIsPlayEnd);
+      videoElement.addEventListener('waiting', this.videoMixinOnWaiting);
+      videoElement.addEventListener('playing', this.videoMixinOnIsPlaying);
+      videoElement.addEventListener('error', this.videoMixinHandleError);
     },
-    removeEvents(videoElement) {
+    videoMixinRemoveEvents(videoElement) {
       videoElement.removeEventListener(
         'loadedmetadata',
-        this.handleLoadedMetaData,
+        this.videoMixinHandleLoadedMetaData,
       );
-      videoElement.removeEventListener('loadeddata', this.handleLoadedData);
-      videoElement.removeEventListener('progress', this.setBufferedTime);
-      videoElement.removeEventListener('pause', this.setIsPlay);
-      videoElement.removeEventListener('play', this.setIsPlay);
-      videoElement.removeEventListener('ended', this.setIsPlayEnd);
-      videoElement.removeEventListener('waiting', this.onWaiting);
-      videoElement.removeEventListener('playing', this.onIsPlaying);
-      videoElement.removeEventListener('error', this.handleError);
+      videoElement.removeEventListener(
+        'loadeddata',
+        this.videoMixinHandleLoadedData,
+      );
+      videoElement.removeEventListener(
+        'progress',
+        this.videoMixinSetBufferedTime,
+      );
+      videoElement.removeEventListener('pause', this.videoMixinSetIsPlay);
+      videoElement.removeEventListener('play', this.videoMixinSetIsPlay);
+      videoElement.removeEventListener('ended', this.videoMixinSetIsPlayEnd);
+      videoElement.removeEventListener('waiting', this.videoMixinOnWaiting);
+      videoElement.removeEventListener('playing', this.videoMixinOnIsPlaying);
+      videoElement.removeEventListener('error', this.videoMixinHandleError);
     },
-    initStates() {
+    videoMixinInitStates() {
       this.setVideoStates('isPlay', this.autoPlay || false);
       this.setVideoStates('isPlayEnd', false);
       this.setVideoStates('isWaiting', false);
@@ -174,28 +190,29 @@ export default {
       this.setVideoStates('currentPlayTime', 0);
       this.setVideoStates('bufferedTime', 0);
     },
+    // 外部method
     setVideoStates(property, value) {
       this.$set(this.videoStates, property, value);
     },
   },
   mounted() {
     // 绑定element
-    this.vRef = this.$refs.videoRef;
-    if (this.vRef) {
-      const videoElement = this.vRef;
+    this.videoMixinVRef = this.$refs.videoRef;
+    if (this.videoMixinVRef) {
+      const videoElement = this.videoMixinVRef;
       videoElement.volume = this.videoStates.volume / 100; // 设置音量
-      this.addEvents(videoElement);
+      this.videoMixinAddEvents(videoElement);
       // update计时器
-      this.interval = setInterval(() => {
+      this.videoMixinInterval = setInterval(() => {
         this.setVideoStates('currentPlayTime', videoElement.currentTime);
       }, 20);
     }
   },
   beforeDestroy() {
-    if (this.vRef) {
-      const videoElement = this.vRef;
-      this.removeEvents(videoElement);
-      clearInterval(this.interval);
+    if (this.videoMixinVRef) {
+      const videoElement = this.videoMixinVRef;
+      this.videoMixinRemoveEvents(videoElement);
+      clearInterval(this.videoMixinInterval);
     }
   },
 };

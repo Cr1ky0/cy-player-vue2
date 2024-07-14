@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <CyPlayer :v-src="src" :auto-play="true"></CyPlayer>
+    <CyPlayer :v-src="src" :auto-play="autoPlay"></CyPlayer>
   </div>
 </template>
 
@@ -17,6 +17,8 @@ export default {
       // src: 'https://cdn.pixabay.com/video/2024/03/31/206294_small.mp4?download',
       src: 'https://cdn.pixabay.com/video/2024/02/21/201308-915375262_small.mp4?download',
       autoPlay: true,
+      themeColor: 'red',
+      keepControllerShow: true,
     };
   },
 };

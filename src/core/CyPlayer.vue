@@ -1,23 +1,52 @@
 <template>
-  <div id="cy-player-container" class="cy-player-container" ref="containerRef">
-    <video :src="vSrc" class="cy-player" id="cy-player" ref="videoRef" controls>
+  <div
+    id="cy-player-container"
+    class="cy-player-container"
+    ref="containerRef"
+    :style="{ ...styles }"
+  >
+    <video
+      class="cy-player"
+      id="cy-player"
+      ref="videoRef"
+      :src="vSrc"
+      :autoplay="autoPlay"
+      muted
+    >
       <source :src="vSrc" type="video/mp4" />
       <source :src="vSrc" type="video/webm" />
       <source :src="vSrc" type="video/ogg" />
       <source :src="vSrc" type="application/x-mpegURL" />
       <source :src="vSrc" type="application/vnd.apple.mpegURL" />
     </video>
+    <BottomProgress
+      v-if="showProgressFloat"
+      :mouse-enter="mouseEnter"
+    ></BottomProgress>
   </div>
 </template>
 
 <script>
 import videoMixin from '@/core/mixin/video';
+import mouseCheckMixin from '@/utils/mousecheck';
 import defineProps from '@/core/defineProps';
+import BottomProgress from '@/core/progress/BottomProgress.vue';
 
 export default {
   name: 'CyPlayer',
-  components: {},
-  mixins: [defineProps, videoMixin],
+  components: { BottomProgress },
+  mixins: [defineProps, videoMixin, mouseCheckMixin],
+  provide() {
+    return {
+      videoStates: this.videoStates,
+      videoController: this.videoController,
+      setVideoStates: this.setVideoStates,
+      options: {
+        themeColor: this.themeColor,
+        keepControllerShow: this.keepControllerShow,
+      },
+    };
+  },
 };
 </script>
 
@@ -35,12 +64,14 @@ export default {
 }
 
 .cy-player-container {
-  width: 1000px;
-  height: 600px;
   position: relative;
   //overflow: hidden;
   background-color: #000;
   z-index: $top-layer;
+
+  // TODO:Test Properties
+  width: 1000px;
+  height: 600px;
 }
 
 .cy-player {
