@@ -35,16 +35,16 @@ export default {
        * @description video本身的控制方法
        */
       videoController: {
-        load: () => this.vRef.value?.load(),
-        play: () => this.vRef.value?.play(),
-        pause: () => this.vRef.value?.pause(),
+        load: () => this.vRef?.load(),
+        play: () => this.vRef?.play(),
+        pause: () => this.vRef?.pause(),
         setVolume: (volume) => {
-          if (this.vRef.value) {
+          if (this.vRef) {
             // 记录上一次音量值
             if (volume >= 1) localStorage.setItem('lastVolume', String(volume));
             // muted状态下始终为0
             const v = volume <= 0 ? 0 : volume >= 100 ? 100 : volume;
-            this.vRef.value.volume =
+            this.vRef.volume =
               volume <= 0 ? 0 : volume >= 100 ? 1 : volume / 100;
             this.setVideoStates('volume', v);
             // 存储音量值
@@ -52,7 +52,7 @@ export default {
           }
         },
         setCurTime: (curTime) => {
-          if (this.vRef.value) this.vRef.value.currentTime = curTime;
+          if (this.vRef) this.vRef.currentTime = curTime;
         },
         setVideoSrc: (src) => {
           this.setVideoStates('curSrc', src);
@@ -65,8 +65,8 @@ export default {
      * @description 视频是否播放
      */
     setIsPlay() {
-      if (this.vRef.value) {
-        this.setVideoStates('isPlay', !this.vRef.value.paused);
+      if (this.vRef) {
+        this.setVideoStates('isPlay', !this.vRef.paused);
         if (this.videoStates.isPlay) this.setVideoStates('isPlayEnd', false); // 播放时重置
       }
     },
@@ -74,19 +74,19 @@ export default {
      * @description 视频结束
      */
     setIsPlayEnd() {
-      if (this.vRef.value) {
+      if (this.vRef) {
         if (this.videoStates.isLoop) this.videoController.play(); // 播放结束循环播放
-        this.setVideoStates('isPlayEnd', this.vRef.value.ended);
+        this.setVideoStates('isPlayEnd', this.vRef.ended);
       }
     },
     /**
      * @description 缓冲时间
      */
     setBufferedTime() {
-      if (this.vRef.value && this.vRef.value.buffered.length >= 1) {
+      if (this.vRef && this.vRef.buffered.length >= 1) {
         let max = 0;
-        for (let i = 0; i < this.vRef.value.buffered.length; i++) {
-          const curBuffer = this.vRef.value.buffered.end(i);
+        for (let i = 0; i < this.vRef.buffered.length; i++) {
+          const curBuffer = this.vRef.buffered.end(i);
           if (curBuffer > max) max = curBuffer;
         }
         this.setVideoStates('bufferedTime', max); // 浏览器已经缓冲的媒体数据的最远时间点
@@ -97,18 +97,18 @@ export default {
      * @description loadedmetadata事件
      */
     handleLoadedMetaData() {
-      if (this.vRef.value) {
+      if (this.vRef) {
         this.setVideoStates('isError', false);
-        this.setVideoStates('duration', this.vRef.value.duration || 0);
-        this.setVideoStates('videoWidth', this.vRef.value.videoWidth);
-        this.setVideoStates('videoHeight', this.vRef.value.videoHeight);
+        this.setVideoStates('duration', this.vRef.duration || 0);
+        this.setVideoStates('videoWidth', this.vRef.videoWidth);
+        this.setVideoStates('videoHeight', this.vRef.videoHeight);
       }
     },
     /**
      * @description loadeddata事件
      */
     handleLoadedData() {
-      if (this.vRef.value) {
+      if (this.vRef) {
         // 切换quality时逻辑
         const curPlayTime = localStorage.getItem('curPlayTime');
         const curTime = parseFloat(curPlayTime || '0');
@@ -127,8 +127,8 @@ export default {
      * @description 从waiting恢复播放
      */
     onIsPlaying() {
-      if (this.timer.value) clearTimeout(this.timer.value);
-      this.timer.value = setTimeout(() => {
+      if (this.timer) clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
         this.setVideoStates('isWaiting', false); // waiting结束
       }, 100);
     },

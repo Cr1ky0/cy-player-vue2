@@ -9,5 +9,8 @@ export default {
       type: Boolean,
       default: false,
     },
+    styles: {
+      type: Object,
+    },
   },
 };
