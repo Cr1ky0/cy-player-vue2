@@ -38,9 +38,6 @@ export default {
       else return 0;
     },
   },
-  mounted() {
-    console.log(this.options.themeColor);
-  },
 };
 </script>
 
