@@ -47,19 +47,19 @@ export default {
       const videoWidth = videoElement.videoWidth;
       const videoHeight = videoElement.videoHeight;
       // container size
-      if (!this.options.width && !this.options.styles?.width)
+      if (!this.width && !this.styles?.width)
         videoContainer.style.width = `${videoWidth}px`;
-      if (!this.options.height && !this.options.styles?.height)
+      if (!this.height && !this.styles?.height)
         videoContainer.style.height = `${videoHeight}px`;
-      if (this.options.height) {
-        if (typeof this.options.height === 'number')
-          videoContainer.style.height = `${this.options.height}px`;
-        else videoContainer.style.height = this.options.height;
+      if (this.height) {
+        if (typeof this.height === 'number')
+          videoContainer.style.height = `${this.height}px`;
+        else videoContainer.style.height = this.height;
       }
-      if (this.options.width) {
-        if (typeof this.options.width === 'number')
-          videoContainer.style.width = `${this.options.width}px`;
-        else videoContainer.style.width = this.options.width;
+      if (this.width) {
+        if (typeof this.width === 'number')
+          videoContainer.style.width = `${this.width}px`;
+        else videoContainer.style.width = this.width;
       }
       // adapt video size
       if (typeof adaptVideo !== 'boolean' || adaptVideo) {
