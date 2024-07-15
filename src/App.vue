@@ -9,6 +9,7 @@
       @player-mounted="handleMounted"
       @before-player-destroy="handleBeforeDestroy"
       @play="handlePlay"
+      @time-change="handleTimeChange"
     ></CyPlayer>
     <button @click="toggle = !toggle">卸载</button>
   </div>
@@ -31,6 +32,9 @@ export default {
     },
     handlePlay(e) {
       // console.log(e);
+    },
+    handleTimeChange(e) {
+      // console.log(e.currentPlayTime);
     },
   },
   data() {

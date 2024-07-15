@@ -12,14 +12,14 @@ export default {
     },
     'videoStates.isPlayEnd'() {
       if (this.videoStates.isPlayEnd) {
-        this.$emit('playEnd', this.videoStates);
+        this.$emit('play-end', this.videoStates);
       }
     },
     'videoStates.volume'() {
-      this.$emit('volumeChange', this.videoStates);
+      this.$emit('volume-change', this.videoStates);
     },
     'videoStates.currentPlayTime'() {
-      this.$emit('timeChange', this.videoStates);
+      this.$emit('time-change', this.videoStates);
     },
     'videoStates.isWaiting'() {
       this.$emit('waiting', this.videoStates);
