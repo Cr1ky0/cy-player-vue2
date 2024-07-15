@@ -24,7 +24,7 @@ export default {
     },
 
     handleTouchStart() {
-      if (this.mouseCheckMixinTimer.value) clearTimeout(this.mouseCheckMixinTimer);
+      if (this.mouseCheckMixinTimer) clearTimeout(this.mouseCheckMixinTimer);
       this.mouseEnter = true;
     },
 

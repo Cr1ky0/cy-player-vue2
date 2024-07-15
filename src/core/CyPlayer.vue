@@ -10,7 +10,6 @@
       id="cy-player"
       ref="videoRef"
       :src="vSrc"
-      :autoplay="autoPlay"
     >
       <source :src="vSrc" type="video/mp4" />
       <source :src="vSrc" type="video/webm" />
@@ -38,10 +37,12 @@ import mouseCheckMixin from '@/utils/mousecheck';
 import defineProps from '@/core/defineProps';
 import BottomProgress from '@/core/progress/BottomProgress.vue';
 import Controller from '@/core/controller/Controller.vue';
+import SvgIcon from '@/components/svgicon/SvgIcon.vue';
+import '@/assets/icons';
 
 export default {
   name: 'CyPlayer',
-  components: { Controller, BottomProgress },
+  components: { SvgIcon, Controller, BottomProgress },
   mixins: [defineProps, videoMixin, mouseCheckMixin, sizeMixin, callbackMixin],
   methods: {
     handleSize() {

@@ -3,7 +3,6 @@
     <CyPlayer
       v-if="toggle"
       :v-src="src"
-      :auto-play="autoPlay"
       :width="width"
       :height="height"
       @player-mounted="handleMounted"
@@ -12,12 +11,12 @@
       @time-change="handleTimeChange"
       @expose="getExposedData"
     >
-      <template #playend>
-        <div>playend</div>
-      </template>
-      <template #waiting>
-        <div>waiting</div>
-      </template>
+      <!--      <template #playend>-->
+      <!--        <div>playend</div>-->
+      <!--      </template>-->
+      <!--      <template #waiting>-->
+      <!--        <div>waiting</div>-->
+      <!--      </template>-->
       <!--    <template #paused>-->
       <!--      <div>paused</div>-->
       <!--    </template>-->
@@ -56,17 +55,16 @@ export default {
       toggle: true,
       // src: 'https://cdn.pixabay.com/video/2024/03/31/206294_small.mp4?download',
       src: 'https://cdn.pixabay.com/video/2024/02/21/201308-915375262_small.mp4?download',
-      autoPlay: true,
       themeColor: 'red',
       keepControllerShow: true,
       width: '1000',
       height: '650',
 
       // 测试选项
-      options:{
-        showToast:true,
-        toastPlacement:'center'
-      }
+      options: {
+        showToast: true,
+        toastPlacement: 'center',
+      },
     };
   },
   methods: {

@@ -26,7 +26,7 @@ export default {
        */
       videoStates: {
         curSrc: '', // 当前的src
-        isPlay: this.autoPlay || false, // 是否播放
+        isPlay: false, // 是否播放
         isPlayEnd: false, // 是否播放结束
         isWaiting: false, // 视频播放过程中的暂停
         isLoop: false, // 视频是否循环播放
@@ -184,7 +184,7 @@ export default {
       videoElement.removeEventListener('error', this.videoMixinHandleError);
     },
     videoMixinInitStates() {
-      this.setVideoStates('isPlay', this.autoPlay || false);
+      this.setVideoStates('isPlay', false);
       this.setVideoStates('isPlayEnd', false);
       this.setVideoStates('isWaiting', false);
       this.setVideoStates('duration', 0);

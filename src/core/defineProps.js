@@ -5,10 +5,6 @@ export default {
       required: true,
       default: '',
     },
-    autoPlay: {
-      type: Boolean,
-      default: false,
-    },
     styles: Object,
     themeColor: {
       type: String,
