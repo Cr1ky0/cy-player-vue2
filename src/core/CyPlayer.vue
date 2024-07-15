@@ -11,6 +11,7 @@
       ref="videoRef"
       :src="vSrc"
       :autoplay="autoPlay"
+      controls
       muted
     >
       <source :src="vSrc" type="video/mp4" />
@@ -29,6 +30,7 @@
 <script>
 import videoMixin from '@/core/mixin/video';
 import sizeMixin from '@/core/mixin/size';
+import callbackMixin from '@/core/mixin/callback';
 import mouseCheckMixin from '@/utils/mousecheck';
 import defineProps from '@/core/defineProps';
 import BottomProgress from '@/core/progress/BottomProgress.vue';
@@ -36,7 +38,7 @@ import BottomProgress from '@/core/progress/BottomProgress.vue';
 export default {
   name: 'CyPlayer',
   components: { BottomProgress },
-  mixins: [defineProps, videoMixin, mouseCheckMixin, sizeMixin],
+  mixins: [defineProps, videoMixin, mouseCheckMixin, sizeMixin, callbackMixin],
   methods: {
     handleSize() {
       this.setTotalSize(this.videoAutoFix);
@@ -59,10 +61,18 @@ export default {
       const vElement = this.$refs.videoRef;
       vElement.addEventListener('loadedmetadata', this.handleSize);
     }
+    // mounted事件
+    this.$emit('player-mounted', this.$refs.videoRef, this.$refs.containerRef);
   },
   beforeDestroy() {
     const vElement = this.$refs.videoRef;
     vElement.removeEventListener('loadedmetadata', this.handleSize);
+    // before destroy
+    this.$emit(
+      'before-player-destroy',
+      this.$refs.videoRef,
+      this.$refs.containerRef,
+    );
   },
   provide() {
     return {
