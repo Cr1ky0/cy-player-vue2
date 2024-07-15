@@ -11,8 +11,6 @@
       ref="videoRef"
       :src="vSrc"
       :autoplay="autoPlay"
-      controls
-      muted
     >
       <source :src="vSrc" type="video/mp4" />
       <source :src="vSrc" type="video/webm" />
@@ -63,6 +61,12 @@ export default {
     }
     // mounted事件
     this.$emit('player-mounted', this.$refs.videoRef, this.$refs.containerRef);
+    // expose
+    this.$emit('expose', {
+      videoElement: this.$refs.videoRef,
+      states: this.videoStates,
+      controller: this.videoController,
+    });
   },
   beforeDestroy() {
     const vElement = this.$refs.videoRef;
@@ -73,6 +77,14 @@ export default {
       this.$refs.videoRef,
       this.$refs.containerRef,
     );
+  },
+  watch: {
+    width() {
+      this.setTotalSize();
+    },
+    height() {
+      this.setTotalSize();
+    },
   },
   provide() {
     return {
