@@ -22,11 +22,24 @@ export default {
       type: Boolean,
       default: false,
     },
+    controllerStyles: Object,
     width: [String, Number],
     height: [String, Number],
     videoAutoFix: {
       type: Boolean,
       default: true,
+    },
+    maskIconPlacement: {
+      type: String,
+      default: 'center',
+    },
+    customizedItemPlacement: {
+      type: String,
+      default: 'center',
+    },
+    toastPlacement: {
+      type: String,
+      default: 'left-top',
     },
   },
 };

@@ -18,6 +18,11 @@
       <source :src="vSrc" type="application/x-mpegURL" />
       <source :src="vSrc" type="application/vnd.apple.mpegURL" />
     </video>
+    <Controller :mouse-enter="mouseEnter">
+      <template v-for="(_, key) in $slots" v-slot:[key]>
+        <slot :name="key" />
+      </template>
+    </Controller>
     <BottomProgress
       v-if="showProgressFloat"
       :mouse-enter="mouseEnter"
@@ -32,10 +37,11 @@ import callbackMixin from '@/core/mixin/callback';
 import mouseCheckMixin from '@/utils/mousecheck';
 import defineProps from '@/core/defineProps';
 import BottomProgress from '@/core/progress/BottomProgress.vue';
+import Controller from '@/core/controller/Controller.vue';
 
 export default {
   name: 'CyPlayer',
-  components: { BottomProgress },
+  components: { Controller, BottomProgress },
   mixins: [defineProps, videoMixin, mouseCheckMixin, sizeMixin, callbackMixin],
   methods: {
     handleSize() {
@@ -94,6 +100,9 @@ export default {
       options: {
         themeColor: this.themeColor,
         keepControllerShow: this.keepControllerShow,
+        controllerStyles: this.controllerStyles,
+        maskIconPlacement:this.maskIconPlacement,
+        customizedItemPlacement: this.customizedItemPlacement
       },
     };
   },

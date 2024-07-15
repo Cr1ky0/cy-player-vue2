@@ -11,7 +11,26 @@
       @play="handlePlay"
       @time-change="handleTimeChange"
       @expose="getExposedData"
-    ></CyPlayer>
+    >
+            <template #playend>
+              <div>playend</div>
+            </template>
+            <template #waiting>
+              <div>waiting</div>
+            </template>
+      <!--    <template #paused>-->
+      <!--      <div>paused</div>-->
+      <!--    </template>-->
+      <!--    <template #error>-->
+      <!--      <div>error</div>-->
+      <!--    </template>-->
+      <!--    <template #slider>-->
+      <!--      <div>123</div>-->
+      <!--    </template>-->
+      <!--    <template #customized>-->
+      <!--      <div style="color:#FFF">123123</div>-->
+      <!--    </template>-->
+    </CyPlayer>
     <button @click="toggle = !toggle">卸载</button>
   </div>
 </template>
