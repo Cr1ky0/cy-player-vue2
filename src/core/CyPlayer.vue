@@ -101,8 +101,10 @@ export default {
         themeColor: this.themeColor,
         keepControllerShow: this.keepControllerShow,
         controllerStyles: this.controllerStyles,
-        maskIconPlacement:this.maskIconPlacement,
-        customizedItemPlacement: this.customizedItemPlacement
+        maskIconPlacement: this.maskIconPlacement,
+        customizedItemPlacement: this.customizedItemPlacement,
+        toastPlacement: this.toastPlacement,
+        showToast: this.showToast,
       },
     };
   },

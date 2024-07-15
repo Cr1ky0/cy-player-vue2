@@ -19,7 +19,7 @@ export default {
      */
     toastMixinCreateToast(message) {
       const ToastConstructor = Vue.extend(Toast);
-      this.toastRef = new ToastConstructor({
+      this.toastMixinToastInstance = new ToastConstructor({
         propsData: {
           message,
           position: this.options.toastPlacement,
@@ -28,7 +28,7 @@ export default {
     },
     // 外部方法
     // 显示Toast
-    showToast(message,  duration = 2000) {
+    showToast(message, duration = 2000) {
       if (this.options.showToast) {
         // 如果之前已有Toast则先清除
         if (this.toastMixinTimer) {
@@ -41,7 +41,7 @@ export default {
         container.appendChild(toastContainer);
 
         this.toastMixinCreateToast(message);
-        this.toastMixinToastInstance.$mount(toastContainer);  // 挂载组件
+        this.toastMixinToastInstance.$mount(toastContainer); // 挂载组件
 
         // 设置定时器，过一段时间后卸载Toast
         this.toastMixinTimer = setTimeout(() => {
@@ -53,9 +53,11 @@ export default {
     closeToast() {
       if (this.toastMixinToastInstance) {
         this.toastMixinToastInstance.$destroy();
-        this.toastMixinToastInstance.$el.parentNode.removeChild(this.toastMixinToastInstance.$el);
+        this.toastMixinToastInstance.$el.parentNode.removeChild(
+          this.toastMixinToastInstance.$el,
+        );
       }
       this.toastMixinToastInstance = null;
-    }
+    },
   },
 };

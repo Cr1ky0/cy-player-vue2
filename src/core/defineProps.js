@@ -41,5 +41,9 @@ export default {
       type: String,
       default: 'left-top',
     },
+    showToast: {
+      type: Boolean,
+      default: true,
+    },
   },
 };

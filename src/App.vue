@@ -12,12 +12,12 @@
       @time-change="handleTimeChange"
       @expose="getExposedData"
     >
-            <template #playend>
-              <div>playend</div>
-            </template>
-            <template #waiting>
-              <div>waiting</div>
-            </template>
+      <template #playend>
+        <div>playend</div>
+      </template>
+      <template #waiting>
+        <div>waiting</div>
+      </template>
       <!--    <template #paused>-->
       <!--      <div>paused</div>-->
       <!--    </template>-->
@@ -32,17 +32,20 @@
       <!--    </template>-->
     </CyPlayer>
     <button @click="toggle = !toggle">卸载</button>
+    <button @click="handleToast">Toast测试</button>
   </div>
 </template>
 
 <script>
 import CyPlayer from '@/core/CyPlayer.vue';
+import toastMixin from '@/core/mixin/toast';
 
 export default {
   name: 'App',
   components: {
     CyPlayer,
   },
+  mixins: [toastMixin],
   data() {
     return {
       exposedData: {
@@ -58,6 +61,12 @@ export default {
       keepControllerShow: true,
       width: '1000',
       height: '650',
+
+      // 测试选项
+      options:{
+        showToast:true,
+        toastPlacement:'center'
+      }
     };
   },
   methods: {
@@ -75,6 +84,9 @@ export default {
     },
     handleTimeChange(e) {
       // console.log(e.currentPlayTime);
+    },
+    handleToast() {
+      this.showToast('test');
     },
   },
 };

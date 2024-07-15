@@ -30,7 +30,6 @@ export default {
   watch: {
     'videoStates.isError'() {
       if (this.videoStates.isError) {
-        // toast
         this.showToast('视频因未知原因加载失败')
       }
     },
