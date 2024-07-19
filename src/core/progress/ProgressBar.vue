@@ -223,11 +223,6 @@ $progress-radius: 0.1rem;
   }
 
   /* Vue 2 过渡效果 */
-  .v-enter-active,
-  .v-leave-active {
-    transition: opacity 0.5s; /* 可以根据需要调整过渡时间 */
-  }
-  
   .v-enter,
   .v-leave-to {
     opacity: 0;
