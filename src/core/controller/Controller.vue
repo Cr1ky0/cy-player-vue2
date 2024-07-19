@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ControllerMask>
+    <ControllerMask :change-is-drag="changeIsDrag">
       <template v-for="(_, key) in filteredSlots" v-slot:[key]>
         <slot :name="key" />
       </template>
@@ -10,11 +10,16 @@
       :style="style"
       v-if="!videoStates.isError"
     >
-      <!--    <ProgressBar>-->
-      <!--      <template v-if="slots.slider" #slider>-->
-      <!--        <slot name="slider"></slot>-->
-      <!--      </template>-->
-      <!--    </ProgressBar>-->
+      <ProgressBar
+        :change-is-drag="changeIsDrag"
+        @progress-mouse-down="handleProgressMouseDown"
+        @progress-mouse-up="handleProgressMouseUp"
+        @progress-mouse-move="handleProgressMouseMove"
+      >
+        <template v-if="$slots.slider" #slider>
+          <slot name="slider"></slot>
+        </template>
+      </ProgressBar>
       <!--    <div class="cy-player-controller-controls-container">-->
       <!--      <Playback />-->
       <!--      <Controls />-->
@@ -25,9 +30,12 @@
 
 <script>
 import ControllerMask from '@/core/controller/ControllerMask.vue';
+import ProgressBar from '@/core/progress/ProgressBar.vue';
+import Vue from 'vue';
 
 export default {
-  components: { ControllerMask },
+  components: { ProgressBar, ControllerMask },
+  inject: ['videoStates', 'options'],
   props: {
     mouseEnter: {
       type: Boolean,
@@ -36,10 +44,23 @@ export default {
   },
   data() {
     return {
-      isDrag: false,
+      isDrag: Vue.observable({ value: false }), // 注意这里isDrag不像Vue3一样能通过ref实现provide也是响应式的，故需要传入子组件一个函数来修改
     };
   },
-  inject: ['videoStates', 'options'],
+  methods: {
+    handleProgressMouseDown() {
+      this.$emit('progressMouseDown');
+    },
+    handleProgressMouseMove() {
+      this.$emit('progressMouseMove');
+    },
+    handleProgressMouseUp() {
+      this.$emit('progressMouseUp');
+    },
+    changeIsDrag(flag) {
+      this.isDrag.value = flag;
+    },
+  },
   computed: {
     style() {
       return this.options.controllerStyles;

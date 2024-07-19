@@ -86,6 +86,9 @@ export default {
     handleToast() {
       this.showToast('test');
     },
+    handleProgressMouseDown(e) {
+      console.log(e);
+    },
   },
 };
 </script>

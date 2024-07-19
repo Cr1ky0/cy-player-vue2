@@ -5,19 +5,19 @@
     ref="containerRef"
     :style="{ ...styles }"
   >
-    <video
-      class="cy-player"
-      id="cy-player"
-      ref="videoRef"
-      :src="vSrc"
-    >
+    <video class="cy-player" id="cy-player" ref="videoRef" :src="vSrc">
       <source :src="vSrc" type="video/mp4" />
       <source :src="vSrc" type="video/webm" />
       <source :src="vSrc" type="video/ogg" />
       <source :src="vSrc" type="application/x-mpegURL" />
       <source :src="vSrc" type="application/vnd.apple.mpegURL" />
     </video>
-    <Controller :mouse-enter="mouseEnter">
+    <Controller
+      :mouse-enter="mouseEnter"
+      @progress-mouse-down="handleProgressMouseDown"
+      @progress-mouse-up="handleProgressMouseUp"
+      @progress-mouse-move="handleProgressMouseMove"
+    >
       <template v-for="(_, key) in $slots" v-slot:[key]>
         <slot :name="key" />
       </template>
@@ -37,16 +37,24 @@ import mouseCheckMixin from '@/utils/mousecheck';
 import defineProps from '@/core/defineProps';
 import BottomProgress from '@/core/progress/BottomProgress.vue';
 import Controller from '@/core/controller/Controller.vue';
-import SvgIcon from '@/components/svgicon/SvgIcon.vue';
 import '@/assets/icons';
 
 export default {
   name: 'CyPlayer',
-  components: { SvgIcon, Controller, BottomProgress },
+  components: { Controller, BottomProgress },
   mixins: [defineProps, videoMixin, mouseCheckMixin, sizeMixin, callbackMixin],
   methods: {
     handleSize() {
       this.setTotalSize(this.videoAutoFix);
+    },
+    handleProgressMouseDown() {
+      this.$emit('progressMouseDown', this.videoStates);
+    },
+    handleProgressMouseMove() {
+      this.$emit('progressMouseMove', this.videoStates);
+    },
+    handleProgressMouseUp() {
+      this.$emit('progressMouseUp', this.videoStates);
     },
   },
   mounted() {

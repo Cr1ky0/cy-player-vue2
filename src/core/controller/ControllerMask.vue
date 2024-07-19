@@ -40,7 +40,7 @@
       </div>
     </div>
     <div
-      v-else-if="!isDrag && !videoStates.isPlay"
+      v-else-if="!isDrag.value && !videoStates.isPlay"
       class="cy-player-pause-icon"
     >
       <slot v-if="$slots.paused" name="paused"></slot>
@@ -75,11 +75,18 @@ import toastMixin from '@/core/mixin/toast';
 import touchHandlerMixin from '@/core/mixin/touch-handler';
 import SvgIcon from '@/components/svgicon/SvgIcon.vue';
 import VolumeSlider from '@/core/controls/volume/VolumeSlider.vue';
+import { formatTime } from '@/utils';
 
 export default {
   components: { VolumeSlider, SvgIcon },
   inject: ['videoStates', 'videoController', 'options', 'isDrag'],
   mixins: [toastMixin, touchHandlerMixin],
+  props: {
+    changeIsDrag: {
+      type: Function,
+      required: true,
+    },
+  },
   data() {
     return {
       volumeStyles: {
@@ -113,13 +120,13 @@ export default {
       if (operator === 'Progress') {
         // 视频暂停并打开isDrag
         this.videoController.pause();
-        this.isDrag = true;
+        this.changeIsDrag(true);
       }
     },
     touchEndEffect(operator) {
       if (operator === 'Progress') {
         this.videoController.play();
-        this.isDrag = false;
+        this.changeIsDrag(false);
         this.showToast(
           `视频快进至:${formatTime(Math.floor(this.videoStates.currentPlayTime))}`,
         );
