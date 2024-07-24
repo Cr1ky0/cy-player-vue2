@@ -1,9 +1,7 @@
 import Toast from '@/components/toast/Toast.vue';
 import Vue from 'vue';
 
-/**
- * @desc 导入options
- */
+// 引入 options
 export default {
   data() {
     return {

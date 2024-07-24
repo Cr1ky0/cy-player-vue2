@@ -13,6 +13,8 @@
       <source :src="vSrc" type="application/vnd.apple.mpegURL" />
     </video>
     <Controller
+      :container-ref="containerRef"
+      :video-ref="videoRef"
       :mouse-enter="mouseEnter"
       @progress-mouse-down="handleProgressMouseDown"
       @progress-mouse-up="handleProgressMouseUp"
@@ -43,6 +45,27 @@ export default {
   name: 'CyPlayer',
   components: { Controller, BottomProgress },
   mixins: [defineProps, videoMixin, mouseCheckMixin, sizeMixin, callbackMixin],
+  data() {
+    return {
+      containerRef: null,
+      videoRef: null,
+      options: {
+        themeColor: this.themeColor,
+        keepControllerShow: this.keepControllerShow,
+        controllerStyles: this.controllerStyles,
+        maskIconPlacement: this.maskIconPlacement,
+        customizedItemPlacement: this.customizedItemPlacement,
+        toastPlacement: this.toastPlacement,
+        showToast: this.showToast,
+        quality: this.quality,
+        isSettingShow: this.isSettingShow,
+        isPicInPicShow: this.isPicInPicShow,
+        isWebScreenFullShow: this.isWebScreenFullShow,
+        isScreenFullShow: this.isScreenFullShow,
+        isMultiplePlayShow: this.isMultiplePlayShow,
+      },
+    };
+  },
   methods: {
     handleSize() {
       this.setTotalSize(this.videoAutoFix);
@@ -58,6 +81,9 @@ export default {
     },
   },
   mounted() {
+    // 初始化Ref
+    this.containerRef = this.$refs.containerRef;
+    this.videoRef = this.$refs.videoRef;
     // 初始化时没有宽高自动设定一个值，避免初始化加载error元素尺寸消失
     if (
       !this.width &&
@@ -106,15 +132,7 @@ export default {
       videoStates: this.videoStates,
       videoController: this.videoController,
       setVideoStates: this.setVideoStates,
-      options: {
-        themeColor: this.themeColor,
-        keepControllerShow: this.keepControllerShow,
-        controllerStyles: this.controllerStyles,
-        maskIconPlacement: this.maskIconPlacement,
-        customizedItemPlacement: this.customizedItemPlacement,
-        toastPlacement: this.toastPlacement,
-        showToast: this.showToast,
-      },
+      options: this.options,
     };
   },
 };

@@ -20,10 +20,10 @@
           <slot name="slider"></slot>
         </template>
       </ProgressBar>
-      <!--    <div class="cy-player-controller-controls-container">-->
-      <!--      <Playback />-->
-      <!--      <Controls />-->
-      <!--    </div>-->
+      <div class="cy-player-controller-controls-container">
+        <PlayBack />
+        <Controls :container-ref="containerRef" :video-ref="videoRef"/>
+      </div>
     </div>
   </div>
 </template>
@@ -31,20 +31,23 @@
 <script>
 import ControllerMask from '@/core/controller/ControllerMask.vue';
 import ProgressBar from '@/core/progress/ProgressBar.vue';
-import Vue from 'vue';
+import PlayBack from '@/core/controls/PlayBack.vue';
+import Controls from '@/core/controls/Controls.vue';
 
 export default {
-  components: { ProgressBar, ControllerMask },
+  components: { Controls, PlayBack, ProgressBar, ControllerMask },
   inject: ['videoStates', 'options'],
   props: {
     mouseEnter: {
       type: Boolean,
       required: true,
     },
+    containerRef:HTMLDivElement,
+    videoRef:HTMLVideoElement,
   },
   data() {
     return {
-      isDrag: Vue.observable({ value: false }), // 注意这里isDrag不像Vue3一样能通过ref实现provide也是响应式的，故需要传入子组件一个函数来修改
+      isDrag: { value: false },
     };
   },
   methods: {

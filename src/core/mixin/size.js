@@ -1,5 +1,5 @@
 /**
- * @desc 引入变量 videoStates options 导出 getElementSize setTotalSize adaptiveVideoSize
+ * @desc 引入变量 videoStates options containerRef videoRef 导出 getElementSize setTotalSize adaptiveVideoSize
  */
 export default {
   data() {
@@ -69,7 +69,9 @@ export default {
     },
   },
   mounted() {
-    if (this.$refs.videoRef) this.sizeMixinVRef = this.$refs.videoRef;
-    if (this.$refs.containerRef) this.sizeMixinCRef = this.$refs.containerRef;
+    if (this.videoRef || this.$refs.videoRef) {
+      this.sizeMixinVRef = this.videoRef || this.$refs.videoRef;
+    }
+    if (this.containerRef || this.$refs.containerRef) this.sizeMixinCRef = this.$refs.containerRef;
   },
 };

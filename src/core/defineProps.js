@@ -41,5 +41,40 @@ export default {
       type: Boolean,
       default: true,
     },
+    quality: {
+      type: Array,
+      validator(values) {
+        return values.every((value) => {
+          const hasVQ =
+            value.hasOwnProperty('vQ') && typeof value.vQ === 'object'; // 假设 vQ 是一个对象
+          const hasSrc =
+            value.hasOwnProperty('src') && typeof value.src === 'string';
+          const hasChosen = value.hasOwnProperty('chosen')
+            ? typeof value.chosen === 'boolean'
+            : true;
+          return hasVQ && hasSrc && hasChosen;
+        });
+      },
+    },
+    isSettingShow: {
+      type: Boolean,
+      default: true,
+    },
+    isPicInPicShow: {
+      type: Boolean,
+      default: true,
+    },
+    isWebScreenFullShow: {
+      type: Boolean,
+      default: true,
+    },
+    isScreenFullShow: {
+      type: Boolean,
+      default: true,
+    },
+    isMultiplePlayShow: {
+      type: Boolean,
+      default: true,
+    },
   },
 };
