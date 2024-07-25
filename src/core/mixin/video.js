@@ -1,5 +1,14 @@
+import Hls from 'hls.js';
+
+export const supportTypes = [
+  'video/mp4',
+  'video/webm',
+  'video/ogg',
+  'application/vnd.apple.mpegurl',
+  'application/x-mpegurl',
+];
 /**
- * @desc 引入 auoPlay
+ * @desc 引入 auoPlay options poster sourceType vSrc quality
  * 导出 videoStates videoController setVideoStates
  */
 export default {
@@ -19,6 +28,7 @@ export default {
        * @description 全局hls对象
        */
       videoMixinCurHls: null,
+      curHls: null,
 
       // 外部变量
       /**
@@ -191,15 +201,113 @@ export default {
       this.setVideoStates('currentPlayTime', 0);
       this.setVideoStates('bufferedTime', 0);
     },
+    videoMixinSetHls(videoElem, src) {
+      // 检查浏览器是否支持hls格式
+      if (Hls.isSupported()) {
+        if (this.curHls) {
+          this.curHls.detachMedia();
+          this.curHls.loadSource(src);
+          this.curHls.attachMedia(videoElem);
+        } else {
+          const hls = new Hls();
+          this.curHls = hls;
+          hls.loadSource(src); // 将视频源加载到 HLS 对象中
+          hls.attachMedia(videoElem); // 将 HLS 对象附加到 videoElem 上
+        }
+      }
+    },
+    async videoMixinCheckHls(url) {
+      const response = await fetch(url);
+      if (response.ok) {
+        // content type
+        const contentTypes = response.headers
+          .get('content-type')
+          .toLowerCase()
+          .split(';')
+          .map((item) => item.trim());
+        const type =
+          contentTypes.find((type) => {
+            return supportTypes.includes(type);
+          }) || null;
+        // 类型检测
+        if (type) {
+          // LOAD OPTIONS
+          return (
+            type === 'application/vnd.apple.mpegurl' ||
+            type === 'application/x-mpegurl'
+          );
+        }
+        return false;
+      }
+      return false;
+    },
+    videoMixinLoadSrc(src) {
+      const videoElement = this.videoMixinVRef;
+      // 导入src
+      // 注意必须在setHls之前执行，因为如果src为空那么attach会失败
+      videoElement.src = src;
+      // Source源修改
+      const sources = videoElement.childNodes;
+      sources.forEach((source) => {
+        source.src = src;
+      });
+    },
+    videoMixinLoadVideo(url) {
+      this.videoMixinLoadSrc(url);
+      if (this.sourceType === 'hls') {
+        this.videoMixinSetHls(this.videoMixinVRef, url);
+      } else if (this.sourceType === 'auto') {
+        this.videoMixinCheckHls(url).then((isHls) => {
+          if (isHls) {
+            this.videoMixinSetHls(this.videoMixinVRef, url);
+          }
+        });
+      }
+    },
     // 外部method
     setVideoStates(property, value) {
       this.$set(this.videoStates, property, value);
     },
   },
+  watch: {
+    videoMixinVRef() {
+      if (this.videoMixinVRef) {
+        const videoElement = this.videoMixinVRef;
+        // 导入poster
+        videoElement.poster = this.poster ? this.poster : '';
+      }
+    },
+    'options.poster'(){
+      if (this.videoMixinVRef) {
+        const videoElement = this.videoMixinVRef;
+        // 导入poster
+        videoElement.poster = this.poster ? this.poster : '';
+      }
+    },
+    'videoStates.curSrc'(){
+      this.videoMixinInitStates();
+      this.videoMixinLoadVideo(this.videoStates.curSrc);
+    }
+  },
   mounted() {
+    // 初始化状态
+    const isLoop = localStorage.getItem('isLoop');
+    const volume = localStorage.getItem('volume');
+    // const curSrc = localStorage.getItem('curSrc');
+    if (isLoop) this.videoStates.isLoop = isLoop === 'true';
+    if (volume) this.videoStates.volume = parseFloat(volume);
+    // 初始Src设置
+    const index = this.quality?.findIndex((item) => {
+      return item.chosen;
+    });
+    // 存在chosen的src首先选择
+    if (index && index !== -1) this.videoStates.curSrc = this.quality[index].src;
+    // 如果打开了qualitySave则采用默认保存规则
+    // else if (option.qualitySave && curSrc) videoStates.curSrc = curSrc;
+  else this.videoStates.curSrc = this.vSrc;
     // 绑定element
-    this.videoMixinVRef = this.$refs.videoRef;
-    if (this.videoMixinVRef) {
+    if (this.$refs.videoRef) {
+      this.videoMixinVRef = this.$refs.videoRef;
       const videoElement = this.videoMixinVRef;
       videoElement.volume = this.videoStates.volume / 100; // 设置音量
       this.videoMixinAddEvents(videoElement);

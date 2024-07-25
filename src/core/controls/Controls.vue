@@ -1,32 +1,32 @@
 <template>
   <div class="cy-player-controller-controls">
     <!--    <Quality v-if="hasQuality" />-->
-    <!--    <MultiplePlay v-if="showMultiplePlay" />-->
-    <!--    <Volume />-->
-    <!--    <Setting v-if="showSetting" />-->
-        <ControlTool
-          v-if="showPicInPic"
-          active-icon-name="inPicture"
-          :flag="true"
-          tip="画中画"
-          @click="togglePictureInPicture"
-        />
-        <ControlTool
-          v-if="showWebScreenFull"
-          active-icon-name="closeWebFullScreen"
-          inactive-icon-name="webFullScreen"
-          :flag="isWebScreenFull"
-          tip="网页全屏"
-          @click="toggleWebScreenFull"
-        />
-        <ControlTool
-          v-if="showScreenFull"
-          active-icon-name="closeFullScreen"
-          inactive-icon-name="fullScreen"
-          :flag="isScreenFull"
-          tip="全屏"
-          @click="toggleScreenFull"
-        />
+    <MultiplePlay v-if="showMultiplePlay" :video-ref="videoRef" />
+    <Volume />
+    <Setting v-if="showSetting" />
+    <ControlTool
+      v-if="showPicInPic"
+      active-icon-name="inPicture"
+      :flag="true"
+      tip="画中画"
+      @click="togglePictureInPicture"
+    />
+    <ControlTool
+      v-if="showWebScreenFull"
+      active-icon-name="closeWebFullScreen"
+      inactive-icon-name="webFullScreen"
+      :flag="isWebScreenFull"
+      tip="网页全屏"
+      @click="toggleWebScreenFull"
+    />
+    <ControlTool
+      v-if="showScreenFull"
+      active-icon-name="closeFullScreen"
+      inactive-icon-name="fullScreen"
+      :flag="isScreenFull"
+      tip="全屏"
+      @click="toggleScreenFull"
+    />
   </div>
 </template>
 
@@ -36,13 +36,16 @@ import picInPicMixin from '@/core/mixin/pic-in-pic';
 import sizeMixin from '@/core/mixin/size';
 import screenFullMixin from '@/core/mixin/screen-full';
 import ControlTool from '@/components/controltool/ControlTool.vue';
+import Setting from '@/core/controls/setting/Setting.vue';
+import Volume from '@/core/controls/volume/Volume.vue';
+import MultiplePlay from '@/core/controls/multiple/MultiplePlay.vue';
 
 export default {
-  components: { ControlTool },
+  components: { MultiplePlay, Volume, Setting, ControlTool },
   inject: ['options', 'videoStates'],
   props: {
-    containerRef:HTMLDivElement,
-    videoRef:HTMLVideoElement,
+    containerRef: HTMLDivElement,
+    videoRef: HTMLVideoElement,
   },
   mixins: [webScreenFullMixin, picInPicMixin, sizeMixin, screenFullMixin],
   computed: {

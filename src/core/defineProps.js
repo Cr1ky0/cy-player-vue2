@@ -5,6 +5,13 @@ export default {
       required: true,
       default: '',
     },
+    sourceType: {
+      type: String,
+      default: 'h264',
+    },
+    poster: {
+      type: String,
+    },
     styles: Object,
     themeColor: {
       type: String,
