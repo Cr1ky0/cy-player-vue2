@@ -13,6 +13,7 @@
       <source :src="vSrc" type="application/vnd.apple.mpegURL" />
     </video>
     <Controller
+      v-if="showController"
       :container-ref="containerRef"
       :video-ref="videoRef"
       :mouse-enter="mouseEnter"

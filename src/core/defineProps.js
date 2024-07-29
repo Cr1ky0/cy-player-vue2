@@ -50,11 +50,13 @@ export default {
     },
     quality: {
       type: Array,
-      default: [],
+      default() {
+        return new Array(0);
+      },
       validator(values) {
         return values.every((value) => {
           const hasVQ =
-            value.hasOwnProperty('vQ') && typeof value.vQ === 'object'; // 假设 vQ 是一个对象
+            value.hasOwnProperty('vQ') && typeof value.vQ === 'string'; // 假设 vQ 是一个对象
           const hasSrc =
             value.hasOwnProperty('src') && typeof value.src === 'string';
           const hasChosen = value.hasOwnProperty('chosen')

@@ -5,6 +5,17 @@
       :v-src="src"
       :width="width"
       :height="height"
+      :quality="[
+        {
+          vQ: '720p',
+          src: 'https://cdn.pixabay.com/video/2024/02/21/201308-915375262_small.mp4?download',
+          // chosen: true,
+        },
+        {
+          vQ: '480p',
+          src: 'https://cdn.pixabay.com/video/2024/03/31/206294_small.mp4?download',
+        },
+      ]"
       @player-mounted="handleMounted"
       @before-player-destroy="handleBeforeDestroy"
       @play="handlePlay"

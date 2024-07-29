@@ -1,6 +1,11 @@
 <template>
   <svg
-    :style="{ ...styles, fontSize: fontSize || '1.125rem' }"
+    :style="{
+      ...styles,
+      fontSize: fontSize || '1.125rem',
+      width: fontSize,
+      height: fontSize,
+    }"
     @click="handleClick"
     aria-hidden="true"
   >
@@ -33,8 +38,6 @@ export default {
 svg {
   @include selectable(none);
   cursor: pointer;
-  width: 1em;
-  height: 1em;
   overflow: hidden;
 }
 </style>

@@ -32,6 +32,10 @@ export default {
 
       // 外部变量
       /**
+       * @desc Controller显示控制
+       */
+      showController: false,
+      /**
        * @description video本身的相关状态
        */
       videoStates: {
@@ -73,6 +77,9 @@ export default {
         },
         setVideoSrc: (src) => {
           this.setVideoStates('curSrc', src);
+        },
+        setShowController: (flag) => {
+          this.showController = flag;
         },
       },
     };
@@ -136,6 +143,12 @@ export default {
       }
     },
     /**
+     * @desc canplay
+     */
+    videoMixinHandleCanplay() {
+      this.showController = true;
+    },
+    /**
      * @description 视频播放中的waiting
      */
     videoMixinOnWaiting() {
@@ -155,6 +168,7 @@ export default {
      */
     videoMixinHandleError() {
       this.setVideoStates('isError', true);
+      this.showController = true;
     },
     videoMixinAddEvents(videoElement) {
       videoElement.addEventListener(
@@ -172,6 +186,7 @@ export default {
       videoElement.addEventListener('waiting', this.videoMixinOnWaiting);
       videoElement.addEventListener('playing', this.videoMixinOnIsPlaying);
       videoElement.addEventListener('error', this.videoMixinHandleError);
+      videoElement.addEventListener('canplay', this.videoMixinHandleCanplay);
     },
     videoMixinRemoveEvents(videoElement) {
       videoElement.removeEventListener(
@@ -192,6 +207,7 @@ export default {
       videoElement.removeEventListener('waiting', this.videoMixinOnWaiting);
       videoElement.removeEventListener('playing', this.videoMixinOnIsPlaying);
       videoElement.removeEventListener('error', this.videoMixinHandleError);
+      videoElement.removeEventListener('canplay', this.videoMixinHandleCanplay);
     },
     videoMixinInitStates() {
       this.setVideoStates('isPlay', false);
@@ -277,17 +293,17 @@ export default {
         videoElement.poster = this.poster ? this.poster : '';
       }
     },
-    'options.poster'(){
+    'options.poster'() {
       if (this.videoMixinVRef) {
         const videoElement = this.videoMixinVRef;
         // 导入poster
         videoElement.poster = this.poster ? this.poster : '';
       }
     },
-    'videoStates.curSrc'(){
+    'videoStates.curSrc'() {
       this.videoMixinInitStates();
       this.videoMixinLoadVideo(this.videoStates.curSrc);
-    }
+    },
   },
   mounted() {
     // 初始化状态
@@ -301,10 +317,11 @@ export default {
       return item.chosen;
     });
     // 存在chosen的src首先选择
-    if (index && index !== -1) this.videoStates.curSrc = this.quality[index].src;
+    if (index && index !== -1)
+      this.videoStates.curSrc = this.quality[index].src;
     // 如果打开了qualitySave则采用默认保存规则
     // else if (option.qualitySave && curSrc) videoStates.curSrc = curSrc;
-  else this.videoStates.curSrc = this.vSrc;
+    else this.videoStates.curSrc = this.vSrc;
     // 绑定element
     if (this.$refs.videoRef) {
       this.videoMixinVRef = this.$refs.videoRef;

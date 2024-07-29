@@ -16,7 +16,7 @@ export default {
       return { color: this.options.themeColor };
     },
     qualities() {
-      return this.options.quality.map((item) => item.src);
+      return this.options.quality.map((item) => item.vQ);
     },
     srcs() {
       return this.options.quality.map((item) => item.src);
@@ -26,24 +26,7 @@ export default {
     },
   },
   methods: {
-    handleChangeQuality(index) {
-      const curSrc = this.srcs[index];
-      this.videoStates.curSrc = curSrc;
-      this.chosenIndex = index;
-      localStorage.setItem(
-        'curPlayTime',
-        String(this.videoStates.currentPlayTime),
-      ); // 保证切换进度
-      this.showToast(`切换至清晰度:${this.qualities[this.chosenIndex]}`);
-      this.videoController.play();
-      // 视频质量切换保存
-      // if (playerOption.qualitySave) localStorage.setItem('curSrc', curSrc);
-      // 视频切换回调
-      this.handleQualityChange(this.qualities[index]);
-    },
-  },
-  watch: {
-    'videoStates.curSrc'() {
+    handleChosen() {
       // 优先选择chosen的
       this.chosenIndex = this.options.quality.findIndex((item) => {
         return item.chosen;
@@ -55,6 +38,30 @@ export default {
         });
       }
     },
+    handleChangeQuality(index) {
+      const curSrc = this.srcs[index];
+      this.videoStates.curSrc = curSrc;
+      this.chosenIndex = index;
+      localStorage.setItem(
+        'curPlayTime',
+        String(this.videoStates.currentPlayTime),
+      ); // 保证切换进度
+      this.showToast(`切换至清晰度:${this.qualities[this.chosenIndex]}`);
+      this.videoController.play();
+      this.videoController.setShowController(false); // 切换隐藏Controller
+      // 视频质量切换保存
+      // if (playerOption.qualitySave) localStorage.setItem('curSrc', curSrc);
+      // 视频切换回调
+      this.handleQualityChange(this.qualities[index]);
+    },
+  },
+  watch: {
+    'videoStates.curSrc'() {
+      this.handleChosen();
+    },
+  },
+  mounted() {
+    this.handleChosen();
   },
 };
 </script>
