@@ -22,7 +22,10 @@
       </ProgressBar>
       <div class="cy-player-controller-controls-container">
         <PlayBack />
-        <Controls :container-ref="containerRef" :video-ref="videoRef"/>
+        <Controls
+          :container-ref="containerRef"
+          :video-ref="videoRef"
+        />
       </div>
     </div>
   </div>
@@ -42,8 +45,8 @@ export default {
       type: Boolean,
       required: true,
     },
-    containerRef:HTMLDivElement,
-    videoRef:HTMLVideoElement,
+    containerRef: HTMLDivElement,
+    videoRef: HTMLVideoElement,
   },
   data() {
     return {

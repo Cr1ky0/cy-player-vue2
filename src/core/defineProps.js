@@ -50,6 +50,7 @@ export default {
     },
     quality: {
       type: Array,
+      default: [],
       validator(values) {
         return values.every((value) => {
           const hasVQ =

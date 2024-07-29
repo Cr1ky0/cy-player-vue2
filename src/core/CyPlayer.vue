@@ -16,6 +16,7 @@
       :container-ref="containerRef"
       :video-ref="videoRef"
       :mouse-enter="mouseEnter"
+      @quality-change="handleQualityChange"
       @progress-mouse-down="handleProgressMouseDown"
       @progress-mouse-up="handleProgressMouseUp"
       @progress-mouse-move="handleProgressMouseMove"
@@ -67,6 +68,9 @@ export default {
     };
   },
   methods: {
+    handleQualityChange(quality) {
+      this.$emit('qualityChange', quality);
+    },
     handleSize() {
       this.setTotalSize(this.videoAutoFix);
     },
@@ -133,6 +137,7 @@ export default {
       videoController: this.videoController,
       setVideoStates: this.setVideoStates,
       options: this.options,
+      handleQualityChange: this.handleQualityChange,
     };
   },
 };

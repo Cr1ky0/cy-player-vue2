@@ -1,6 +1,6 @@
 <template>
   <div class="cy-player-controller-controls">
-    <!--    <Quality v-if="hasQuality" />-->
+    <Quality v-if="hasQuality"/>
     <MultiplePlay v-if="showMultiplePlay" :video-ref="videoRef" />
     <Volume />
     <Setting v-if="showSetting" />
@@ -39,9 +39,10 @@ import ControlTool from '@/components/controltool/ControlTool.vue';
 import Setting from '@/core/controls/setting/Setting.vue';
 import Volume from '@/core/controls/volume/Volume.vue';
 import MultiplePlay from '@/core/controls/multiple/MultiplePlay.vue';
+import Quality from '@/core/controls/quality/Quality.vue';
 
 export default {
-  components: { MultiplePlay, Volume, Setting, ControlTool },
+  components: { Quality, MultiplePlay, Volume, Setting, ControlTool },
   inject: ['options', 'videoStates'],
   props: {
     containerRef: HTMLDivElement,
