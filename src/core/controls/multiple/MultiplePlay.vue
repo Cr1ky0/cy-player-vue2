@@ -3,11 +3,8 @@ import toastMixin from '@/core/mixin/toast';
 
 export default {
   name: 'MultiplePlay',
-  inject: ['options'],
+  inject: ['options','videoRef'],
   mixins: [toastMixin],
-  props: {
-    videoRef: HTMLVideoElement,
-  },
   data() {
     return {
       multiples: ['2.0x', '1.75x', '1.5x', '1.25x', '1.0x', '0.75x', '0.5x'],
@@ -23,7 +20,7 @@ export default {
   methods: {
     handleClick(index) {
       const chosenMultiple = parseFloat(this.multiples[index]);
-      const element = this.videoRef;
+      const element = this.videoRef.value;
       element.playbackRate = chosenMultiple;
       this.chosenIndex = index;
       this.showToast(`当前倍速：${chosenMultiple}`);

@@ -14,8 +14,6 @@
     </video>
     <Controller
       v-if="showController"
-      :container-ref="containerRef"
-      :video-ref="videoRef"
       :mouse-enter="mouseEnter"
       @quality-change="handleQualityChange"
       @progress-mouse-down="handleProgressMouseDown"
@@ -49,8 +47,8 @@ export default {
   mixins: [defineProps, videoMixin, mouseCheckMixin, sizeMixin, callbackMixin],
   data() {
     return {
-      containerRef: null,
-      videoRef: null,
+      containerRef: { value: null },
+      videoRef: { value: null },
       options: {
         themeColor: this.themeColor,
         keepControllerShow: this.keepControllerShow,
@@ -87,8 +85,8 @@ export default {
   },
   mounted() {
     // 初始化Ref
-    this.containerRef = this.$refs.containerRef;
-    this.videoRef = this.$refs.videoRef;
+    this.containerRef.value = this.$refs.containerRef;
+    this.videoRef.value = this.$refs.videoRef;
     // 初始化时没有宽高自动设定一个值，避免初始化加载error元素尺寸消失
     if (
       !this.width &&
@@ -139,6 +137,8 @@ export default {
       setVideoStates: this.setVideoStates,
       options: this.options,
       handleQualityChange: this.handleQualityChange,
+      containerRef: this.containerRef,
+      videoRef: this.videoRef,
     };
   },
 };

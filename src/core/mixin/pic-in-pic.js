@@ -6,21 +6,19 @@ import toastMixin from '@/core/mixin/toast';
 export default {
   inject: ['options'],
   mixins: [toastMixin],
-  watch: {
-    videoRef() {
-      const element = this.videoRef;
-      if (element) {
-        this.picInPicMixinERef = element;
-        element.addEventListener(
-          'enterpictureinpicture',
-          this.picInPicMixinChangeIsPictureInPicture,
-        );
-        element.addEventListener(
-          'leavepictureinpicture',
-          this.picInPicMixinChangeIsPictureInPicture,
-        );
-      }
-    },
+  mounted() {
+    const element = this.videoRef.value;
+    if (element) {
+      this.picInPicMixinERef = element;
+      element.addEventListener(
+        'enterpictureinpicture',
+        this.picInPicMixinChangeIsPictureInPicture,
+      );
+      element.addEventListener(
+        'leavepictureinpicture',
+        this.picInPicMixinChangeIsPictureInPicture,
+      );
+    }
   },
   beforeDestroy() {
     const element = this.picInPicMixinERef;

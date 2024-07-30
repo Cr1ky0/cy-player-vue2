@@ -69,9 +69,9 @@ export default {
     },
   },
   mounted() {
-    if (this.videoRef || this.$refs.videoRef) {
-      this.sizeMixinVRef = this.videoRef || this.$refs.videoRef;
+    if (this.videoRef.value || this.$refs.videoRef) {
+      this.sizeMixinVRef = this.videoRef.value || this.$refs.videoRef;
     }
-    if (this.containerRef || this.$refs.containerRef) this.sizeMixinCRef = this.$refs.containerRef;
+    if (this.containerRef.value || this.$refs.containerRef) this.sizeMixinCRef = this.$refs.containerRef;
   },
 };

@@ -102,7 +102,7 @@ export default {
   },
   methods: {
     onMouseDown() {
-      this.videoController.pause();
+      // this.videoController.pause();
       this.videoController.setCurTime(this.moveTime);
       // 用户指定回调
       this.$emit('progressMouseDown');

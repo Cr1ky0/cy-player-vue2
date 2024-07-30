@@ -6,20 +6,18 @@ import toastMixin from '@/core/mixin/toast';
 export default {
   inject: ['options'],
   mixins: [toastMixin],
-  watch: {
-    containerRef() {
-      const element = this.containerRef;
-      if (element) {
-        this.screenFullMixinERef = element;
-        element.addEventListener(
-          'fullscreenchange',
-          this.screenFullMixinChangeScreenFull,
-        );
-      }
-    },
+  mounted() {
+    const element = this.containerRef.value;
+    if (element) {
+      this.screenFullMixinERef = element;
+      element.addEventListener(
+        'fullscreenchange',
+        this.screenFullMixinChangeScreenFull,
+      );
+    }
   },
   beforeDestroy() {
-    const element = this.containerRef;
+    const element = this.containerRef.value;
     if (element)
       element.removeEventListener(
         'fullscreenchange',

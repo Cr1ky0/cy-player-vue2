@@ -9,7 +9,7 @@ export default {
   },
   methods: {
     toggleWebScreenFull() {
-      const element = this.containerRef;
+      const element = this.containerRef.value;
       if (!this.isWebScreenFull)
         element.classList.add('cy-player-container-web-fullscreen-active');
       else

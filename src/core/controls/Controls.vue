@@ -1,7 +1,7 @@
 <template>
   <div class="cy-player-controller-controls">
-    <Quality v-if="hasQuality"/>
-    <MultiplePlay v-if="showMultiplePlay" :video-ref="videoRef" />
+    <Quality v-if="hasQuality" />
+    <MultiplePlay v-if="showMultiplePlay" />
     <Volume />
     <Setting v-if="showSetting" />
     <ControlTool
@@ -43,11 +43,7 @@ import Quality from '@/core/controls/quality/Quality.vue';
 
 export default {
   components: { Quality, MultiplePlay, Volume, Setting, ControlTool },
-  inject: ['options', 'videoStates'],
-  props: {
-    containerRef: HTMLDivElement,
-    videoRef: HTMLVideoElement,
-  },
+  inject: ['options', 'videoStates', 'containerRef', 'videoRef'],
   mixins: [webScreenFullMixin, picInPicMixin, sizeMixin, screenFullMixin],
   computed: {
     hasQuality() {
@@ -79,7 +75,9 @@ export default {
         // 退出全屏时
         else {
           // 避免和webscreenfull产生冲突，退出时基于容器宽高来设置
-          const { width, height } = this.getElementSize(this.containerRef);
+          const { width, height } = this.getElementSize(
+            this.containerRef.value,
+          );
           this.adaptiveVideoSize(width, height);
         }
       }
@@ -92,7 +90,9 @@ export default {
             // 注意用视口宽高
             this.adaptiveVideoSize(window.innerWidth, window.innerHeight);
           else {
-            const { width, height } = this.getElementSize(this.containerRef);
+            const { width, height } = this.getElementSize(
+              this.containerRef.value,
+            );
             this.adaptiveVideoSize(width, height);
           }
         }
