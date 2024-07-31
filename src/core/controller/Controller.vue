@@ -8,7 +8,7 @@
     <div
       :class="`cy-player-controller-container ${(mouseEnter || keepShow) && !videoStates.isPlayEnd ? 'cy-player-controller-active' : ''}`"
       :style="style"
-      v-if="!videoStates.isError"
+      v-if="!videoStates.isError && showController"
     >
       <ProgressBar
         :change-is-drag="changeIsDrag"
@@ -39,6 +39,10 @@ export default {
   inject: ['videoStates', 'options'],
   props: {
     mouseEnter: {
+      type: Boolean,
+      required: true,
+    },
+    showController: {
       type: Boolean,
       required: true,
     },

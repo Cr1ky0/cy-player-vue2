@@ -15,6 +15,7 @@
     <Controller
       v-if="showController"
       :mouse-enter="mouseEnter"
+      :show-controller="showController"
       @quality-change="handleQualityChange"
       @progress-mouse-down="handleProgressMouseDown"
       @progress-mouse-up="handleProgressMouseUp"

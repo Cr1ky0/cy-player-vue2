@@ -113,49 +113,59 @@ export default {
   },
   methods: {
     handleClick() {
-      if (this.videoStates.isPlay) this.videoController.pause();
-      else this.videoController.play();
+      if (!this.videoStates.isError) {
+        if (this.videoStates.isPlay) this.videoController.pause();
+        else this.videoController.play();
+      }
     },
     touchStartEffect(operator) {
-      if (operator === 'Progress') {
-        // 视频暂停并打开isDrag
-        this.videoController.pause();
-        this.changeIsDrag(true);
+      if (!this.videoStates.isError) {
+        if (operator === 'Progress') {
+          // 视频暂停并打开isDrag
+          this.videoController.pause();
+          this.changeIsDrag(true);
+        }
       }
     },
     touchEndEffect(operator) {
-      if (operator === 'Progress') {
-        this.videoController.play();
-        this.changeIsDrag(false);
-        this.showToast(
-          `视频快进至:${formatTime(Math.floor(this.videoStates.currentPlayTime))}`,
-        );
+      if (!this.videoStates.isError) {
+        if (operator === 'Progress') {
+          this.videoController.play();
+          this.changeIsDrag(false);
+          this.showToast(
+            `视频快进至:${formatTime(Math.floor(this.videoStates.currentPlayTime))}`,
+          );
+        }
+        if (operator === 'Volume')
+          this.showToast(`音量调节至:${Math.floor(this.videoStates.volume)}`);
       }
-      if (operator === 'Volume')
-        this.showToast(`音量调节至:${Math.floor(this.videoStates.volume)}`);
     },
     handleChangeProgress(xChangeProp) {
-      const mutiple = 3; // 操作速率，指定滑动前进的快慢 TODO:后续可以放在参数位置传入
-      let curTime =
-        this.videoStates.currentPlayTime +
-        (xChangeProp / 100) * this.videoStates.duration;
-      // 判断是否<=0或超出播放总时长
-      curTime =
-        curTime <= 0
-          ? 0
-          : curTime >= this.videoStates.duration
-            ? this.videoStates.duration
-            : curTime;
-      // 乘以倍数
-      curTime =
-        this.videoStates.currentPlayTime +
-        (curTime - this.videoStates.currentPlayTime) * mutiple;
-      this.videoController.setCurTime(curTime);
+      if (!this.videoStates.isError) {
+        const mutiple = 3; // 操作速率，指定滑动前进的快慢 TODO:后续可以放在参数位置传入
+        let curTime =
+          this.videoStates.currentPlayTime +
+          (xChangeProp / 100) * this.videoStates.duration;
+        // 判断是否<=0或超出播放总时长
+        curTime =
+          curTime <= 0
+            ? 0
+            : curTime >= this.videoStates.duration
+              ? this.videoStates.duration
+              : curTime;
+        // 乘以倍数
+        curTime =
+          this.videoStates.currentPlayTime +
+          (curTime - this.videoStates.currentPlayTime) * mutiple;
+        this.videoController.setCurTime(curTime);
+      }
     },
     handleChangeVolume(yChangeProp) {
-      let curVolume = this.videoStates.volume - yChangeProp;
-      curVolume = curVolume <= 0 ? 0 : curVolume >= 100 ? 100 : curVolume;
-      this.videoController.setVolume(curVolume);
+      if (!this.videoStates.isError) {
+        let curVolume = this.videoStates.volume - yChangeProp;
+        curVolume = curVolume <= 0 ? 0 : curVolume >= 100 ? 100 : curVolume;
+        this.videoController.setVolume(curVolume);
+      }
     },
   },
   watch: {
