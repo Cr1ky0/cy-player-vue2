@@ -37,9 +37,7 @@ module.exports = {
     },
     output: {
       filename: 'index.js',
-      library: 'CyPlayer',
       libraryTarget: 'umd',
-      libraryExport: 'default',
     },
     plugins: [
       new CopyWebpackPlugin({

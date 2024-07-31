@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/cy-player-vue2">
-    <img src="https://img.shields.io/badge/npm-1.4.5-blue" alt="npm:1.4.5">
+    <img src="https://img.shields.io/badge/npm-1.0.0-blue" alt="npm:1.0.0">
   </a>
   <a href="https://github.com/Cr1ky0/cy-player-vue2">
     <img src="https://img.shields.io/badge/github-1.4.5-blue" alt="github">

@@ -1,10 +1,9 @@
 // 导入单个组件
-import CyPlayer from './core/CyPlayer.vue';
+import CyPlayer from './core';
 
 // 以数组的结构保存组件，便于遍历
 const components = [CyPlayer];
-// 用于按需导入
-export { CyPlayer };
+
 
 // 定义 install 方法
 const install = function (Vue) {
@@ -22,3 +21,4 @@ export default {
   // 导出的对象必须具备一个 install 方法
   install,
 };
+export { CyPlayer };
