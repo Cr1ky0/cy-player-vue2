@@ -22,7 +22,7 @@
 
 
 ## 说明
-- CyPlayer的Vue2移植版，具体使用说明参考Vue3版本文档
+- CyPlayer的Vue2移植版，具体使用说明参考<a href="https://github.com/Cr1ky0/cy-player">Vue3版本</a>文档
 - Vue2版本去掉了option属性，相关属性被移到根标签上
 
 ## 安装

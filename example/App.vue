@@ -48,6 +48,7 @@
 
 <script>
 import CyPlayer from '@/core/CyPlayer.vue';
+// import { CyPlayer } from '../dist';
 import toastMixin from '@/core/mixin/toast';
 
 export default {
