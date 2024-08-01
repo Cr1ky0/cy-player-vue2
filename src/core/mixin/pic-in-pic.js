@@ -7,18 +7,20 @@ export default {
   inject: ['options'],
   mixins: [toastMixin],
   mounted() {
-    const element = this.videoRef.value;
-    if (element) {
-      this.picInPicMixinERef = element;
-      element.addEventListener(
-        'enterpictureinpicture',
-        this.picInPicMixinChangeIsPictureInPicture,
-      );
-      element.addEventListener(
-        'leavepictureinpicture',
-        this.picInPicMixinChangeIsPictureInPicture,
-      );
-    }
+    this.$nextTick(()=>{
+      const element = this.videoRef.value;
+      if (element) {
+        this.picInPicMixinERef = element;
+        element.addEventListener(
+          'enterpictureinpicture',
+          this.picInPicMixinChangeIsPictureInPicture,
+        );
+        element.addEventListener(
+          'leavepictureinpicture',
+          this.picInPicMixinChangeIsPictureInPicture,
+        );
+      }
+    })
   },
   beforeDestroy() {
     const element = this.picInPicMixinERef;

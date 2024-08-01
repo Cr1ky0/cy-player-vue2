@@ -7,14 +7,16 @@ export default {
   inject: ['options'],
   mixins: [toastMixin],
   mounted() {
-    const element = this.containerRef.value;
-    if (element) {
-      this.screenFullMixinERef = element;
-      element.addEventListener(
-        'fullscreenchange',
-        this.screenFullMixinChangeScreenFull,
-      );
-    }
+    this.$nextTick(()=>{
+      const element = this.containerRef.value;
+      if (element) {
+        this.screenFullMixinERef = element;
+        element.addEventListener(
+          'fullscreenchange',
+          this.screenFullMixinChangeScreenFull,
+        );
+      }
+    })
   },
   beforeDestroy() {
     const element = this.containerRef.value;
